@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Page d'accueil</title>
+    <style>
+      /* Réinitialisation des marges et tailles */
+      html, body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        font-family: Arial, sans-serif;
+      }
+
+      /* Déclaration de la police personnalisée */
+      @font-face {
+        font-family: "TypoSlab";
+       /* src: url("assets/font/TypoSlab_Irregular_Demo.otf") format("opentype");*/
+       
+       src: url("assets/font/THEBOLDFONT.ttf") format("truetype");
+        /* format("opentype") convient pour un .otf
+         * format("truetype") conviendrait pour un .ttf, etc.
+         */
+      }
+
+      /* Conteneur principal avec image de fond */
+      #welcomeScreen {
+        position: relative;
+        width: 100%;
+        height: 100vh;
+        background: url('assets/image/ChantierNotreDame.jpg') no-repeat center center/cover;
+      }
+
+      /* Titre utilisant la police TypoSlab */
+      h1 {
+        font-family: "TypoSlab", sans-serif; /* Fallback sur sans-serif si la police ne charge pas */
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        font-size: 2.4rem;
+        font-weight: bold;
+        color: rgb(53, 53, 53);
+        margin: 0;
+      }
+
+      /* Logo (optionnel) */
+      .logo {
+        display: block;
+        position: absolute;
+        bottom: 120px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100px;
+        opacity: 0.8;
+        animation: bounceShake 3s infinite ease-in-out;
+      }
+
+      /* Animation du logo (optionnelle) */
+      @keyframes bounceShake {
+        0%   { transform: translateX(-50%) translateY(0);    }
+        10%  { transform: translateX(-50%) rotate(-5deg);    }
+        20%  { transform: translateX(-50%) rotate(5deg);     }
+        30%  { transform: translateX(-50%) rotate(0);        }
+        40%  { transform: translateX(-50%) translateY(-10px);}
+        50%  { transform: translateX(-50%) translateY(0);    }
+        60%  { transform: translateX(-50%) translateY(-5px); }
+        70%  { transform: translateX(-50%) translateY(0);    }
+        100% { transform: translateX(-50%) translateY(0);    }
+      }
+
+      /* Bouton (optionnel) */
+      #playButton {
+        position: absolute;
+        bottom: 60px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 150px;
+        height: 50px;
+        font-size: 1rem;
+        font-weight: bold;
+        border: none;
+        background: rgb(55, 43, 142);
+        color: white;
+        cursor: pointer;
+        border-radius: 5px;
+        transition: 0.3s;
+      }
+      #playButton:hover {
+        background: rgb(98, 93, 153);
+      }
+
+      /* =============================== */
+      /* Zone d'affichage des phrases   */
+      /* =============================== */
+      #rotatingText {
+        position: absolute;
+        top: 180px;
+        left: 80px;         /* décalage de 50px à gauche */
+        color: white;
+        font-size: 1.8rem;
+        font-weight: bold;
+        /* Transition de l'opacité pour assurer le fondu */
+        transition: opacity 1s ease-in-out;
+      }
+      .visible {
+        opacity: 1;
+      }
+      .hidden {
+        opacity: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Écran de bienvenue -->
+    <div id="welcomeScreen">
+      <h1>QUAND NOTRE-DAME DE PARIS DEVIENT CHANTIER :<br>UN LABORATOIRE POUR LES SCIENCES SOCIALES</h1>
+      <img src="assets/image/ChantierLogo.png" alt="Logo Chantier" class="logo">
+      
+      <!-- Zone où seront affichées les phrases successives -->
+      <div id="rotatingText" class="hidden"></div>
+
+      <button id="playButton">Visite du chantier</button>
+    </div>
+
+    <!-- (Facultatif) Si vous utilisez p5.js pour d'autres parties du projet, conservez-les -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/addons/p5.dom.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.4/addons/p5.sound.min.js"></script>
+    <script src="justification.js"></script>
+    <script src="sketch2.js"></script>
+    <script src="sketch.js"></script>
+
+    <!-- Script pour l'alternance des phrases -->
+    <script>
+      // Tableau des phrases à afficher
+      const phrases = [
+        "❖ Décision politique.",
+        "❖ Déroger au droit commun",
+        "❖ Une pluralité d’usages.",
+        "❖ Entre sacralités religieuse et patrimoniale",
+        "❖ Ethnographier un chantier d’exception"
+      ];
+
+      const textElement = document.getElementById("rotatingText");
+      let index = 0;
+
+      function cyclePhrase() {
+        // 1) On met le texte courant
+        textElement.textContent = phrases[index];
+
+        // 2) Apparition
+        textElement.classList.remove("hidden");
+        textElement.classList.add("visible");
+
+        // 3) Au bout de 2 secondes, on fait la disparition
+        setTimeout(() => {
+          textElement.classList.remove("visible");
+          textElement.classList.add("hidden");
+        }, 2000);
+
+        // 4) Au bout de 4 secondes total, on change de phrase et on relance
+        setTimeout(() => {
+          index = (index + 1) % phrases.length;
+          cyclePhrase();
+        }, 4000);
+      }
+
+      // Lancement automatique au chargement
+      cyclePhrase();
+    </script>
+  </body>
+</html>
